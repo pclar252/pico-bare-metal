@@ -7,6 +7,7 @@ target_link_libraries(test_runner PRIVATE emblib unity)
 
 target_include_directories(test_runner PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 # cmake --build build/host --target run_tests

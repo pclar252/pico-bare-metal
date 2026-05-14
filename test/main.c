@@ -1,12 +1,14 @@
-#include "unity/unity.h"
+#include <unity.h>
 
-void setUp(void) {}
+#include "emblib/mem.h"
+
+#include <test_mem.h>
+
+void setUp(void) { em_static_init(); }
 void tearDown(void) {}
-
-void test_mem(void);
 
 int main(void) {
   UNITY_BEGIN();
-  RUN_TEST(test_mem);
+  RUN_TEST(run_mem_tests);
   return UNITY_END();
 }
