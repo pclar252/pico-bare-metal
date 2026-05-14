@@ -1,0 +1,19 @@
+build/
+*.o
+*.a
+*.d
+.cache/
+compile_commands.json
+
+Makefile
+
+# CMake Artifacts
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+install_manifest.txt
+
+# Claude files
+CLAUDE.md
+.claude/
