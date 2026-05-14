@@ -1,5 +1,6 @@
 add_library(emblib STATIC
   src/mem.c
+  src/ring.c
 )
 
 target_include_directories(emblib PUBLIC
