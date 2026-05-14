@@ -1,6 +1,7 @@
 add_executable(test_runner
   main.c
   test_mem.c
+  test_ring.c
 )
 
 target_link_libraries(test_runner PRIVATE emblib unity)
