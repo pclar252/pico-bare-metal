@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "emblib/cs.h"
 #include "emblib/error.h"
 
 typedef struct {
@@ -12,9 +13,10 @@ typedef struct {
   size_t _head;
   size_t _tail;
   size_t _count;
+  em_cs_t *_cs;
 } em_rb_t;
 
-em_err_t em_rb_init(em_rb_t *rb, uint8_t *buf, size_t capacity);
+em_err_t em_rb_init(em_rb_t *rb, uint8_t *buf, size_t capacity, em_cs_t *cs);
 
 em_err_t em_rb_write(em_rb_t *rb, const uint8_t *data, size_t len);
 

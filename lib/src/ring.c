@@ -1,9 +1,11 @@
 // Ring buffer
-#include "emblib/ring.h"
-#include "emblib/error.h"
 #include <stddef.h>
+#include <stdint.h>
 
-em_err_t em_rb_init(em_rb_t *rb, uint8_t *buf, size_t capacity) {
+#include "emblib/cs.h"
+#include "emblib/ring.h"
+
+em_err_t em_rb_init(em_rb_t *rb, uint8_t *buf, size_t capacity, em_cs_t *cs) {
   if (rb == NULL || buf == NULL || capacity == 0) {
     return EM_ERR_INVALID;
   }
@@ -13,6 +15,7 @@ em_err_t em_rb_init(em_rb_t *rb, uint8_t *buf, size_t capacity) {
   rb->_head = 0;
   rb->_tail = 0;
   rb->_count = 0;
+  rb->_cs = cs;
 
   return EM_OK;
 }
@@ -21,6 +24,8 @@ em_err_t em_rb_write(em_rb_t *rb, const uint8_t *data, size_t len) {
   if (rb == NULL || rb->_buf == NULL || data == NULL) {
     return EM_ERR_INVALID;
   }
+
+  uint32_t saved = em_cs_enter(rb->_cs);
 
   if ((len + rb->_count) > rb->_capacity) {
     return EM_ERR_NO_MEM;
@@ -34,6 +39,8 @@ em_err_t em_rb_write(em_rb_t *rb, const uint8_t *data, size_t len) {
   rb->_count += len;
   rb->_tail = (rb->_tail + len) % rb->_capacity;
 
+  em_cs_exit(rb->_cs, saved);
+
   return EM_OK;
 }
 
@@ -41,6 +48,8 @@ em_err_t em_rb_read(em_rb_t *rb, uint8_t *data, size_t len) {
   if (rb == NULL || rb->_buf == NULL || data == NULL) {
     return EM_ERR_INVALID;
   }
+
+  uint32_t saved = em_cs_enter(rb->_cs);
 
   if (len > rb->_count) {
     return EM_ERR_OOB;
@@ -53,6 +62,8 @@ em_err_t em_rb_read(em_rb_t *rb, uint8_t *data, size_t len) {
 
   rb->_count -= len;
   rb->_head = (rb->_head + len) % rb->_capacity;
+
+  em_cs_exit(rb->_cs, saved);
 
   return EM_OK;
 }

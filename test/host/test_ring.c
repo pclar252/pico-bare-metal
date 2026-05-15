@@ -6,29 +6,29 @@
 void test_rb_init_valid(void) {
   em_rb_t rb;
   uint8_t buf[8];
-  TEST_ASSERT_EQUAL_INT(EM_OK, em_rb_init(&rb, buf, sizeof(buf)));
+  TEST_ASSERT_EQUAL_INT(EM_OK, em_rb_init(&rb, buf, sizeof(buf), NULL));
 }
 
 void test_rb_init_null_rb(void) {
   uint8_t buf[8];
-  TEST_ASSERT_EQUAL_INT(EM_ERR_INVALID, em_rb_init(NULL, buf, sizeof(buf)));
+  TEST_ASSERT_EQUAL_INT(EM_ERR_INVALID, em_rb_init(NULL, buf, sizeof(buf), NULL));
 }
 
 void test_rb_init_null_buf(void) {
   em_rb_t rb;
-  TEST_ASSERT_EQUAL_INT(EM_ERR_INVALID, em_rb_init(&rb, NULL, 8));
+  TEST_ASSERT_EQUAL_INT(EM_ERR_INVALID, em_rb_init(&rb, NULL, 8, NULL));
 }
 
 void test_rb_init_zero_capacity(void) {
   em_rb_t rb;
   uint8_t buf[8];
-  TEST_ASSERT_EQUAL_INT(EM_ERR_INVALID, em_rb_init(&rb, buf, 0));
+  TEST_ASSERT_EQUAL_INT(EM_ERR_INVALID, em_rb_init(&rb, buf, 0, NULL));
 }
 
 void test_rb_write_basic(void) {
   em_rb_t rb;
   uint8_t buf[8];
-  em_rb_init(&rb, buf, sizeof(buf));
+  em_rb_init(&rb, buf, sizeof(buf), NULL);
 
   uint8_t data[] = {1, 2, 3};
   TEST_ASSERT_EQUAL_INT(EM_OK, em_rb_write(&rb, data, sizeof(data)));
@@ -46,14 +46,14 @@ void test_rb_write_null_rb(void) {
 void test_rb_write_null_data(void) {
   em_rb_t rb;
   uint8_t buf[8];
-  em_rb_init(&rb, buf, sizeof(buf));
+  em_rb_init(&rb, buf, sizeof(buf), NULL);
   TEST_ASSERT_EQUAL_INT(EM_ERR_INVALID, em_rb_write(&rb, NULL, 3));
 }
 
 void test_rb_write_overflow(void) {
   em_rb_t rb;
   uint8_t buf[4];
-  em_rb_init(&rb, buf, sizeof(buf));
+  em_rb_init(&rb, buf, sizeof(buf), NULL);
 
   uint8_t data[] = {1, 2, 3, 4, 5};
   TEST_ASSERT_EQUAL_INT(EM_ERR_NO_MEM, em_rb_write(&rb, data, sizeof(data)));
@@ -62,7 +62,7 @@ void test_rb_write_overflow(void) {
 void test_rb_write_exact_capacity(void) {
   em_rb_t rb;
   uint8_t buf[4];
-  em_rb_init(&rb, buf, sizeof(buf));
+  em_rb_init(&rb, buf, sizeof(buf), NULL);
 
   uint8_t data[] = {1, 2, 3, 4};
   TEST_ASSERT_EQUAL_INT(EM_OK, em_rb_write(&rb, data, sizeof(data)));
@@ -75,7 +75,7 @@ void test_rb_write_exact_capacity(void) {
 void test_rb_read_basic(void) {
   em_rb_t rb;
   uint8_t buf[8];
-  em_rb_init(&rb, buf, sizeof(buf));
+  em_rb_init(&rb, buf, sizeof(buf), NULL);
 
   uint8_t written[] = {10, 20, 30};
   em_rb_write(&rb, written, sizeof(written));
@@ -93,7 +93,7 @@ void test_rb_read_null_rb(void) {
 void test_rb_read_null_data(void) {
   em_rb_t rb;
   uint8_t buf[8];
-  em_rb_init(&rb, buf, sizeof(buf));
+  em_rb_init(&rb, buf, sizeof(buf), NULL);
 
   uint8_t written[] = {1, 2, 3};
   em_rb_write(&rb, written, sizeof(written));
@@ -104,7 +104,7 @@ void test_rb_read_null_data(void) {
 void test_rb_read_empty(void) {
   em_rb_t rb;
   uint8_t buf[8];
-  em_rb_init(&rb, buf, sizeof(buf));
+  em_rb_init(&rb, buf, sizeof(buf), NULL);
 
   uint8_t data[3];
   TEST_ASSERT_EQUAL_INT(EM_ERR_OOB, em_rb_read(&rb, data, sizeof(data)));
@@ -113,7 +113,7 @@ void test_rb_read_empty(void) {
 void test_rb_read_underflow(void) {
   em_rb_t rb;
   uint8_t buf[8];
-  em_rb_init(&rb, buf, sizeof(buf));
+  em_rb_init(&rb, buf, sizeof(buf), NULL);
 
   uint8_t written[] = {1, 2};
   em_rb_write(&rb, written, sizeof(written));
@@ -130,7 +130,7 @@ void test_rb_count_null_rb(void) {
 void test_rb_count_null_out(void) {
   em_rb_t rb;
   uint8_t buf[8];
-  em_rb_init(&rb, buf, sizeof(buf));
+  em_rb_init(&rb, buf, sizeof(buf), NULL);
   TEST_ASSERT_EQUAL_INT(EM_ERR_INVALID, em_rb_count(&rb, NULL));
 }
 
@@ -142,14 +142,14 @@ void test_rb_space_null_rb(void) {
 void test_rb_space_null_out(void) {
   em_rb_t rb;
   uint8_t buf[8];
-  em_rb_init(&rb, buf, sizeof(buf));
+  em_rb_init(&rb, buf, sizeof(buf), NULL);
   TEST_ASSERT_EQUAL_INT(EM_ERR_INVALID, em_rb_space(&rb, NULL));
 }
 
 void test_rb_space_decreases_after_write(void) {
   em_rb_t rb;
   uint8_t buf[8];
-  em_rb_init(&rb, buf, sizeof(buf));
+  em_rb_init(&rb, buf, sizeof(buf), NULL);
 
   size_t space;
   em_rb_space(&rb, &space);
@@ -165,7 +165,7 @@ void test_rb_space_decreases_after_write(void) {
 void test_rb_count_increases_after_write(void) {
   em_rb_t rb;
   uint8_t buf[8];
-  em_rb_init(&rb, buf, sizeof(buf));
+  em_rb_init(&rb, buf, sizeof(buf), NULL);
 
   uint8_t data[] = {1, 2, 3};
   em_rb_write(&rb, data, sizeof(data));
@@ -182,7 +182,7 @@ void test_rb_count_increases_after_write(void) {
 void test_rb_count_decreases_after_read(void) {
   em_rb_t rb;
   uint8_t buf[8];
-  em_rb_init(&rb, buf, sizeof(buf));
+  em_rb_init(&rb, buf, sizeof(buf), NULL);
 
   uint8_t data[] = {1, 2, 3, 4};
   em_rb_write(&rb, data, sizeof(data));
@@ -198,7 +198,7 @@ void test_rb_count_decreases_after_read(void) {
 void test_rb_wrap_around(void) {
   em_rb_t rb;
   uint8_t buf[8];
-  em_rb_init(&rb, buf, sizeof(buf));
+  em_rb_init(&rb, buf, sizeof(buf), NULL);
 
   // Fill 6 of 8 bytes
   uint8_t first[] = {1, 2, 3, 4, 5, 6};
