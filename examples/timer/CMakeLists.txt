@@ -5,16 +5,17 @@ cmake_minimum_required(VERSION 3.25)
 if(NOT DEFINED ENV{PICO_SDK_PATH} AND NOT DEFINED PICO_SDK_PATH)
   set(PICO_SDK_FETCH_FROM_GIT ON CACHE BOOL "" FORCE)
 endif()
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake")
-include(pico_sdk_import.cmake)
+include("${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/pico_sdk_import.cmake")
 
 project(timer-example
   VERSION 0.1.0
-  LANGUAGES C ASM
+  LANGUAGES C CXX ASM
 )
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 pico_sdk_init()
 
