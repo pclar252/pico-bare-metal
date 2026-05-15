@@ -25,17 +25,18 @@ add_compile_options(
 
 add_subdirectory(lib)
 
-# Tests are host-only; cross-compiling skips this subtree automatically
-if(NOT CMAKE_CROSSCOMPILING)
+if(PROJECT_IS_TOP_LEVEL)
   include(FetchContent)
-
   FetchContent_Declare(
     Unity
     GIT_REPOSITORY https://github.com/ThrowTheSwitch/Unity.git
     GIT_TAG        v2.6.1
   )
-
   FetchContent_MakeAvailable(Unity)
 
-  add_subdirectory(test)
+  if(NOT CMAKE_CROSSCOMPILING)
+    add_subdirectory(test/host)
+  else()
+    add_subdirectory(test/target)
+  endif()
 endif()
