@@ -28,4 +28,7 @@ target_link_libraries(timer_example PRIVATE
   hardware_gpio
 )
 
+pico_enable_stdio_usb(timer_example 1)
+pico_enable_stdio_uart(timer_example 0)
+
 pico_add_extra_outputs(timer_example)
