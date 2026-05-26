@@ -11,7 +11,7 @@ attach_device() {
     local vid_pid="$2"
 
     local busid
-    busid=$("$USBIPD" list 2>/dev/null | grep "$vid_pid" | awk '{print $1}' | tr -d '\r')
+    busid=$("$USBIPD" list 2>/dev/null | grep "$vid_pid" | awk '{print $1}' | tr -d '\r') || true
 
     if [[ -z "$busid" ]]; then
         echo "Warning: $name ($vid_pid) not found — is it plugged in?"
@@ -20,6 +20,7 @@ attach_device() {
 
     echo "Attaching $name (BUSID $busid)..."
     "$USBIPD" detach --busid "$busid" 2>/dev/null || true
+    sleep 1
     "$USBIPD" attach --wsl --busid "$busid"
     echo "  Done."
 }
